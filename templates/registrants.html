@@ -2,7 +2,7 @@
 {% block content %}
   <ul>
       {% for name in reg %}
-        <li>{{ name }} registered for {{ reg[name] }}</li>
+        <li>{{ name[0] }} registered for {{ name[1] }}</li>
       {% endfor %}
     </ul>
 {% endblock %}
