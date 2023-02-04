@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from sqlalchemy import null
 from mysqlite import DBManager
 
 app = Flask(__name__)
@@ -14,12 +15,23 @@ sqldb = DBManager(db_file_path="demo.db")
 def index():
     return render_template("index.html", SPORT=SPORT)
 
+@app.route("/deregister", methods=["POST"])
+def deregister():
+    name = request.form.get("dename")
+    if name:
+        sqldb.execute(f'DELETE FROM reg WHERE name = "{name}";')
+    return redirect("/registrants")
+
 @app.route("/register", methods=["POST"])
 def register():
     name = request.form.get("name")
     sport = request.form.get("sport")
     if not name or sport not in SPORT:
         return render_template("failure.html")
+    reg = sqldb.execute(f'SELECT * FROM reg WHERE name = "{name}";')
+    if reg:
+        sqldb.execute(f'UPDATE reg SET sport = "{sport}" WHERE name = "{name}";')
+        return redirect("/registrants")
     sqldb.execute(f'INSERT INTO reg (name, sport) VALUES("{name}", "{sport}");')
     return redirect("/registrants")
 
