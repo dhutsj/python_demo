@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect
-from sqlalchemy import null
 from mysqlite import DBManager
 
 app = Flask(__name__)
