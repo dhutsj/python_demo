@@ -9,3 +9,6 @@ INSERT INTO reg (name, sport) VALUES("TSJ", "Basketball");
 SELECT * FROM reg;
 UPDATE reg SET sport = "Football" WHERE name = "TSJ";
 DELETE FROM reg WHERE name = "TSJ";
+
+
+flask run
