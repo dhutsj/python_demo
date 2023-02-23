@@ -88,17 +88,20 @@ def deregister():
 
 @app.route("/register", methods=["POST"])
 def register():
-    hello_demo()
-    name = request.form.get("name")
-    sport = request.form.get("sport")
-    if not name or sport not in SPORT:
-        return render_template("failure.html")
-    reg = sqldb.execute(f'SELECT * FROM reg WHERE name = "{name}";')
-    if reg:
-        sqldb.execute(f'UPDATE reg SET sport = "{sport}" WHERE name = "{name}";')
+    # hello_demo()
+    with tracer.start_as_current_span("register") as span:
+        span.set_attribute("page.location", "register")
+        name = request.form.get("name")
+        sport = request.form.get("sport")
+        if not name or sport not in SPORT:
+            return render_template("failure.html")
+        span.set_attribute("registered.user", name)
+        reg = sqldb.execute(f'SELECT * FROM reg WHERE name = "{name}";')
+        if reg:
+            sqldb.execute(f'UPDATE reg SET sport = "{sport}" WHERE name = "{name}";')
+            return redirect("/registrants")
+        sqldb.execute(f'INSERT INTO reg (name, sport) VALUES("{name}", "{sport}");')
         return redirect("/registrants")
-    sqldb.execute(f'INSERT INTO reg (name, sport) VALUES("{name}", "{sport}");')
-    return redirect("/registrants")
 
 @app.route("/registrants")
 def registrants():
@@ -106,7 +109,6 @@ def registrants():
     return render_template("registrants.html", reg=reg)
 
 def hello_demo():
-    with tracer.start_as_current_span("register") as span:
         time.sleep(1)
         print("hello demo")
 

@@ -12,3 +12,4 @@ DELETE FROM reg WHERE name = "TSJ";
 
 
 flask run
+opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run
