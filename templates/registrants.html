@@ -1,8 +1,27 @@
 {% extends "layout.html" %}
 {% block content %}
-  <ul>
-      {% for name in reg %}
-        <li>{{ name }} registered for {{ reg[name] }}</li>
-      {% endfor %}
-    </ul>
+  <h1>Registrants</h1>
+  <table>
+      <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sport</th>
+            <th></th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for name in reg %}
+          <tr>
+              <td>{{ name[0] }}</td>
+              <td>{{ name[1] }}</td>
+              <td>
+                  <form action="/deregister" method="post">
+                    <input name="dename" type="hidden" value="{{ name[0] }}">
+                    <input type="submit" value="Deregister">
+                  </form>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
 {% endblock %}
