@@ -1,0 +1,31 @@
+name: Docker Build Image CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'app.py'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'app.py'
+    types: [closed]
+
+jobs:
+  build_docker:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag dhutsj/python_demo:v${{ github.sha }}
+    - name: Docker Login
+      run: |
+        echo ${{ secrets.DockerHub_Username }} | docker login -u ${{ secrets.DockerHub_Password }} --password-stdin
+    - name: Push image to Dockerhub
+      if: ${{ success() }}
+      run: |
+        docker push dhutsj/python_demo:v${{ github.sha }}
