@@ -19,3 +19,9 @@ opentelemetry-instrument flask run
 #signoz
 # https://signoz.io/docs/instrumentation/flask/
 OTEL_RESOURCE_ATTRIBUTES=service.name=demoapp OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"  opentelemetry-instrument --traces_exporter otlp_proto_http --metrics_exporter otlp_proto_http flask run
+
+docker push dhutsj/python_demo:latest
+
+docker pull dhutsj/python_demo:latest
+
+docker run -itd --net=host dhutsj/python_demo:latest
