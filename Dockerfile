@@ -17,4 +17,4 @@ EXPOSE 5000
 
 RUN opentelemetry-bootstrap -a install
 
-CMD opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run
+CMD opentelemetry-instrument --traces_exporter console --metrics_exporter console flask run --host=0.0.0.0 --port 5000
