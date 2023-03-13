@@ -1,0 +1,56 @@
+version: "3.7"
+
+networks:
+  demo:
+    network_mode: "host"
+
+services:
+  demoapp:
+    image: dhutsj/python_demo:latest
+    ports:
+      - 5000:5000
+    networks:
+      - demo
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    depends_on:
+      - demoapp
+    ports:
+      - 9090:9090
+    volumes:
+      - - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - demo
+    restart: always
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - prometheus
+    links:
+      - prometheus:prometheus
+    ports:
+      - 3000:3000
+    networks:
+      - demo
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    links:
+      - demoapp
+    ports:
+      - 5775:5775
+      - 6831:6831
+      - 6832:6832
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 9411:9411
+    networks:
+      - demo

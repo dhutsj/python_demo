@@ -36,7 +36,7 @@ resource = Resource(attributes={
 })
 
 jaeger_exporter = JaegerExporter(
-    agent_host_name="127.0.0.1",
+    agent_host_name="0.0.0.0",
     agent_port=6831,
 )
 
