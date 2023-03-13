@@ -19,7 +19,7 @@ scrape_configs:
   - job_name: 'otel-python-demo'
     scrape_interval: 5s
     static_configs:
-      - targets: ['localhost:8000']
+      - targets: ['demoapp:8000']
 
 # remote_write:
 #   - url: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server=tsj_mac_prometheus

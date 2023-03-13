@@ -8,6 +8,7 @@ services:
     image: dhutsj/python_demo:latest
     ports:
       - 5000:5000
+      - 8000:8000
     networks:
       - demo
     restart: always
@@ -15,6 +16,8 @@ services:
   prometheus:
     image: prom/prometheus
     depends_on:
+      - demoapp
+    links:
       - demoapp
     ports:
       - 9090:9090
